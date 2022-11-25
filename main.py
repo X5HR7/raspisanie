@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from ui import Ui_MainWindow 
-from scripts import script_1, script_2, script_3, script_4, script_5
+from scripts import script_1, script_2, script_3, script_4
 from glob import glob
 
 import sys
@@ -36,7 +36,7 @@ class Window(QMainWindow):
         self.path = os.path.abspath('')
         self.excel_table = glob('*.xlsx')
         self.word_doc = glob('*.docx')
-        self.key_word = 'Туманов'
+        self.key_word = ''
 
         #проверка наличия таблицы в папке с приложением и установка значения в поле ввода
         if self.excel_table != []:
@@ -79,16 +79,15 @@ class Window(QMainWindow):
         try:
             start_time = time.time()
             #подключение скриптов
-            excel_table = script_1(file_name=excel_table)
-            script_2(src='resources/base.xlsx', dst=f'{output}/raspisanie.xlsx')
-            script_3(file_name=excel_table, key_word=key_word, output_table=f'{output}/raspisanie.xlsx')
-            script_4(document_name=word_doc, key_word=key_word, excel_table_name=f'{output}/raspisanie.xlsx')
-            script_5(excel_table_name=f'{output}/raspisanie.xlsx')
+            script_1(src='resources/base.xlsx', dst=f'{output}/raspisanie.xlsx')
+            script_2(file_name=excel_table, key_word=key_word, output_table=f'{output}/raspisanie.xlsx')
+            script_3(document_name=word_doc, key_word=key_word, excel_table_name=f'{output}/raspisanie.xlsx')
+            script_4(excel_table_name=f'{output}/raspisanie.xlsx')
 
             self.ui.btn_start.setText('Done')
             self.ui.btn_start.setStyleSheet('background-color: rgb(77, 255, 121)')
             #убирает возможность нажать на кнопку "START" несколько раз подряд
-            self.ui.btn_start.blockSignals(True)
+            #self.ui.btn_start.blockSignals(True)
             print(time.time()-start_time)
 
         except:

@@ -2,24 +2,15 @@ from openpyxl import load_workbook
 from openpyxl.styles import Font, PatternFill
 from docx import Document
 
-import pandas as pd
 import shutil
-
-#пересохранение xls в xlsx
-def script_1(file_name: str) -> str:
-    if file_name.split('.')[-1] == 'xls':
-        pd.read_excel(file_name).to_excel(file_name+'x', index=False, header=False)
-        return file_name+'x'
-    else:
-        return file_name
 
 
 #копируем базовую таблицу и вставляем по указанному адресу
-def script_2(src: str, dst: str) -> None:
+def script_1(src: str, dst: str) -> None:
     shutil.copy2(src=src, dst=dst)
 
 
-def script_3(file_name: str, key_word: str, output_table: str) -> None:
+async def script_2(file_name: str, key_word: str, output_table: str) -> None:
     #открытие таблицы с расписанием
     woorkbook_input = load_workbook(filename=file_name)
     ws1 = woorkbook_input.active
@@ -28,11 +19,11 @@ def script_3(file_name: str, key_word: str, output_table: str) -> None:
     ws2 = woorkbook_base.active
 
     #перебираем все номера строк с таблице
-    for i in range(1, ws1.max_row+1):
+    for row in range(1, ws1.max_row+1):
         #перебираем все номера столбцов в таблице
-        for c in range(1, ws1.max_column+1):
-            #получение ячейки по адресу: i, c; i-№строки, c-№столбца
-            cell = ws1._get_cell(i, c)
+        async for col in range(1, ws1.max_column+1):
+            #получение ячейки по адресу: i, c; row-№строки, col-№столбца
+            cell = ws1._get_cell(row, col)
             #получение значения ячейки
             value = str(cell.value)
 
@@ -67,6 +58,7 @@ def del_spaces(string: str) -> str:
     if string != None:
         return ' '.join([str(i) for i in string.split()])
 
+#удаление всех пробелов из строки
 def del_all_spaces(string: str) -> str:
     if string != None:
         return string.replace(' ', '')
@@ -77,7 +69,7 @@ def get_group(group_name: str) -> str:
     return group[:-1]
 
 
-def script_4(document_name: str, key_word: str, excel_table_name: str) -> None:
+def script_3(document_name: str, key_word: str, excel_table_name: str) -> None:
     #создание экземпляра документа
     doc = Document(document_name)
     #получение списка всех таблиц из документа
@@ -159,7 +151,7 @@ def script_4(document_name: str, key_word: str, excel_table_name: str) -> None:
                     #закрываем соединение с таблицей                       
                     wb.close()
 
-def script_5(excel_table_name: str) -> None:
+def script_4(excel_table_name: str) -> None:
     #открытие таблицы вывода
     wb = load_workbook(excel_table_name)
     ws = wb.active

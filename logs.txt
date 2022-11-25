@@ -1,6 +1,6 @@
 Traceback (most recent call last):
-  File "d:\python_projects\raspisanie2\main.py", line 82, in start
+  File "d:\python_projects\raspisanie2\main.py", line 84, in start
     script_3(file_name=excel_table, key_word=key_word, output_table=f'{output}/raspisanie.xlsx')
-  File "d:\python_projects\raspisanie2\scripts.py", line 44, in script_3
-    group = get_group(del_spaces(ws1._get_cell(row=cell.row-1-offset[time], column=cell.column).value))
-KeyError: 'заведующаяучебнойчастьюЕ.Е.Автономова'
+  File "d:\python_projects\raspisanie2\scripts.py", line 23, in script_3
+    start_time3 = time.time()
+UnboundLocalError: local variable 'time' referenced before assignment
