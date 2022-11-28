@@ -3,7 +3,6 @@ from openpyxl.styles import Font, PatternFill
 from docx import Document
 
 import shutil
-import time
 
 
 #копируем базовую таблицу и вставляем по указанному адресу
@@ -11,12 +10,12 @@ def script_1(src: str, dst: str) -> None:
     shutil.copy2(src=src, dst=dst)
 
 
-def script_2(file_name: str, key_word: str, output_table: str) -> None:
+def script_2(gen_excel_table_path: str, key_word: str, output_table_path: str) -> None:
     #открытие таблицы с расписанием
-    woorkbook_input = load_workbook(filename=file_name)
+    woorkbook_input = load_workbook(filename=gen_excel_table_path)
     ws1 = woorkbook_input.active
     #открытие таблицы, в которую будет записан результат
-    woorkbook_base = load_workbook(filename=output_table)
+    woorkbook_base = load_workbook(filename=output_table_path)
     ws2 = woorkbook_base.active
     
     #перебираем все номера строк с таблице
@@ -49,7 +48,7 @@ def script_2(file_name: str, key_word: str, output_table: str) -> None:
                     ws2[f'{base_days_1[day]}{base_times[time]}'] = ws2[f'{base_days_1[day]}{base_times[time]}'].value+f'{group}\n'
                     ws2[f'{base_days_2[day]}{base_times[time]}'] = ws2[f'{base_days_2[day]}{base_times[time]}'].value+f'{group}\n'
                 #сохраняем таблицу
-                woorkbook_base.save(filename=output_table)
+                woorkbook_base.save(filename=output_table_path)
     #закрываем соединение с таблицами
     woorkbook_input.close()
     woorkbook_base.close()
@@ -70,12 +69,12 @@ def get_group(group_name: str) -> str:
     return group[:-1]
 
 
-def script_3(document_name: str, key_word: str, excel_table_name: str) -> None:
+def script_3(document_path: str, key_word: str, excel_table_path: str) -> None:
     #table
-    wb = load_workbook(excel_table_name)
+    wb = load_workbook(excel_table_path)
     ws = wb.active
     #создание экземпляра документа
-    doc = Document(document_name)
+    doc = Document(document_path)
     #получение списка всех таблиц из документа
     tables = doc.tables
     #заводим счетчик, по значению которого можно будет отпределить день недели (букву столбца в талице вывода)
@@ -123,13 +122,13 @@ def script_3(document_name: str, key_word: str, excel_table_name: str) -> None:
                     ws[f'{doc_days[counter]}{int(cells_list[0].text)+1}'] = f'{text_new} \n'
 
     #сохранение изменений в таблице
-    wb.save(excel_table_name)
+    wb.save(excel_table_path)
     wb.close()
 
 
-def script_4(excel_table_name: str) -> None:
+def script_4(excel_table_path: str) -> None:
     #открытие таблицы вывода
-    wb = load_workbook(excel_table_name)
+    wb = load_workbook(excel_table_path)
     ws = wb.active
 
     for col in range(3, 12, 2):
@@ -152,7 +151,7 @@ def script_4(excel_table_name: str) -> None:
                         fill = PatternFill(patternType='solid', fgColor='427bf5')
                         ws._get_cell(row=row, column=col).font = font
                         ws._get_cell(row=row, column=col).fill = fill
-                        wb.save(excel_table_name)
+                        wb.save(excel_table_path)
 
     #закрываем соединение с таблицей 
     wb.close()

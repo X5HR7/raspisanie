@@ -1,6 +1,6 @@
 Traceback (most recent call last):
-  File "d:\python_projects\raspisanie2\main.py", line 83, in start
+  File "d:\python_projects\raspisanie\main.py", line 83, in start
     script_2(file_name=excel_table, key_word=key_word, output_table=f'{output}/raspisanie.xlsx')
-  File "d:\python_projects\raspisanie2\scripts.py", line 36, in script_2
+  File "d:\python_projects\raspisanie\scripts.py", line 36, in script_2
     group = get_group(del_spaces(ws1._get_cell(row=cell.row-1-offset[time], column=cell.column).value))
 KeyError: 'заведующаяучебнойчастьюЕ.Е.Автономова'
