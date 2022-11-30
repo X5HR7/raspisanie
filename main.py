@@ -4,6 +4,7 @@ from scripts import script_1, script_2, script_3, script_4
 from glob import glob
 
 import sys
+import time
 import os.path
 import traceback
 
@@ -76,16 +77,18 @@ class Window(QMainWindow):
         output = self.ui.lineEdit_output.text()
 
         try:
+            start_time = time.time()
             #подключение скриптов
             script_1(src='resources/base.xlsx', dst=f'{output}/raspisanie.xlsx')
-            script_2(gen_excel_table_path=excel_table, key_word=key_word, output_table_path=f'{output}/raspisanie.xlsx')
-            script_3(document_path=word_doc, key_word=key_word, excel_table_path=f'{output}/raspisanie.xlsx')
-            script_4(excel_table_path=f'{output}/raspisanie.xlsx')
+            script_2(gen_excel_table_path=excel_table, key_word=key_word, output_excel_table_path=f'{output}/raspisanie.xlsx')
+            script_3(document_path=word_doc, key_word=key_word, output_excel_table_path=f'{output}/raspisanie.xlsx')
+            script_4(output_excel_table_path=f'{output}/raspisanie.xlsx')
 
             self.ui.btn_start.setText('Done')
             self.ui.btn_start.setStyleSheet('background-color: rgb(77, 255, 121)')
             #убирает возможность нажать на кнопку "START" несколько раз подряд
             #self.ui.btn_start.blockSignals(True)
+            print(time.time()-start_time)
 
         except:
             #установка стиля и значения для кпопки "START" при возникновении ошибки в процессе работы программы

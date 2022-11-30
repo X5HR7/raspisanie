@@ -1,6 +1,10 @@
 Traceback (most recent call last):
-  File "d:\python_projects\raspisanie\main.py", line 83, in start
-    script_2(file_name=excel_table, key_word=key_word, output_table=f'{output}/raspisanie.xlsx')
-  File "d:\python_projects\raspisanie\scripts.py", line 36, in script_2
-    group = get_group(del_spaces(ws1._get_cell(row=cell.row-1-offset[time], column=cell.column).value))
-KeyError: 'заведующаяучебнойчастьюЕ.Е.Автономова'
+  File "d:\python_projects\raspisanie\main.py", line 82, in start
+    script_1(src='resources/base.xlsx', dst=f'{output}/raspisanie.xlsx')
+  File "d:\python_projects\raspisanie\scripts.py", line 10, in script_1
+    shutil.copy2(src=src, dst=dst)
+  File "C:\Users\adgon\AppData\Local\Programs\Python\Python310\lib\shutil.py", line 434, in copy2
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "C:\Users\adgon\AppData\Local\Programs\Python\Python310\lib\shutil.py", line 256, in copyfile
+    with open(dst, 'wb') as fdst:
+PermissionError: [Errno 13] Permission denied: 'D:\\python_projects\\raspisanie//raspisanie.xlsx'

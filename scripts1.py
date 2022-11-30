@@ -10,7 +10,7 @@ def script_1(src: str, dst: str) -> None:
     shutil.copy2(src=src, dst=dst)
 
 
-def script_2(gen_excel_table_path: str, key_word: str, output_excel_table_path: str, week_num=2) -> None:
+def script_2(gen_excel_table_path: str, key_word: str, output_excel_table_path: str) -> None:
     #открытие таблицы с расписанием
     woorkbook_input = load_workbook(filename=gen_excel_table_path)
     ws1 = woorkbook_input.active
@@ -26,7 +26,6 @@ def script_2(gen_excel_table_path: str, key_word: str, output_excel_table_path: 
             cell = ws1._get_cell(row, col)
             #получение значения ячейки
             value = str(cell.value)
-            value_ed = del_all_spaces(value)
 
             #проверка наличия ключевого слова в ячейке (фамилия преподавателя)
             if key_word in value.split():
@@ -37,16 +36,6 @@ def script_2(gen_excel_table_path: str, key_word: str, output_excel_table_path: 
                 #день недели
                 day = del_spaces(ws1._get_cell(row=cell.row-offset[time], column=1).value)
 
-                #определяет, есть ли разделение пар по неделям
-                if '1н' in value_ed or '2н' in value_ed:
-                    values = value.split('2 н')
-                    if len(values) == 1:
-                        values = value.split('2н')
-
-                    #если пара с номером недели в расписании не соответсвует номеру нужной недели, изменения не вносятся, ячейка пропускается
-                    if (key_word not in values[0] and week_num == 1) or (key_word not in values[1] and week_num == 2):
-                        break
-                
                 #base_days_1[day]: из словаря по ключу "day" получаем букву столбца таблицы
                 #base_times[time]: из словаря по ключу "time" получаем номер строки
                 #ws2[f'{base_days[day]}{base_times[time]}'] - ячейка в таблице вывода
@@ -63,7 +52,6 @@ def script_2(gen_excel_table_path: str, key_word: str, output_excel_table_path: 
     #закрываем соединение с таблицами
     woorkbook_input.close()
     woorkbook_base.close()
-
 
 #удаление лишних пробелов из строки
 def del_spaces(string: str) -> str:
@@ -82,7 +70,7 @@ def get_group(group_name: str) -> str:
 
 
 def script_3(document_path: str, key_word: str, output_excel_table_path: str) -> None:
-    #открытие конечной таблицы
+    #table
     wb = load_workbook(output_excel_table_path)
     ws = wb.active
     #создание экземпляра документа
