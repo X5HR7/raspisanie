@@ -29,5 +29,5 @@ def rename(string: str):
         string[-1] = '.'
         return ''.join([s for s in string]) 
 
-#choose word document path
+
 print(get_names_list('docs/31.docx'))

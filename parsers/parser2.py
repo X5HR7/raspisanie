@@ -62,5 +62,5 @@ def rename(string: str):
         string[-1] = '.'
         return ''.join([s for s in string]) 
 
-#choose excel table path
-#print(get_names(path))
+
+print(get_names(path=r"D:\python_projects\raspisanie\resources\docs\RASPISANIE_UZ_01_1.xlsx"))

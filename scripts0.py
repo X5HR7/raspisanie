@@ -10,7 +10,7 @@ def script_1(src: str, dst: str) -> None:
     shutil.copy2(src=src, dst=dst)
 
 
-def script_2(gen_excel_table_path: str, key_word: str, output_excel_table_path: str, week_num=1) -> None:
+def script_2(gen_excel_table_path: str, key_word: str, output_excel_table_path: str, week_num=2) -> None:
     #открытие таблицы с расписанием
     woorkbook_input = load_workbook(filename=gen_excel_table_path)
     ws1 = woorkbook_input.active
@@ -101,6 +101,12 @@ def script_3(document_path: str, key_word: str, output_excel_table_path: str) ->
             cells_list = row.cells
 
             if key_word in cells_list[3].text.split() and cells_list[3].text != cells_list[5].text:
+                #задает стиль ячейки (красный)
+                font = Font(color='52181b', bold=True)
+                fill = PatternFill(patternType='solid', fgColor='ff707a')
+                ws[f'{doc_days[counter]}{int(cells_list[0].text)+1}'].font = font
+                ws[f'{doc_days[counter]}{int(cells_list[0].text)+1}'].fill = fill
+                
                 #получаем группу из word документа для которой есть замена 
                 group_curr = f'{cells_list[1].text.split()[0]} - {cells_list[1].text.split()[1]}'
                 #получаем список групп по расписанию из конечной таблицы
@@ -113,11 +119,6 @@ def script_3(document_path: str, key_word: str, output_excel_table_path: str) ->
 
                 #убираем группу из расписания
                 if group_curr in group_list:
-                    #задает стиль ячейки (красный)
-                    font = Font(color='52181b', bold=True)
-                    fill = PatternFill(patternType='solid', fgColor='ff707a')
-                    ws[f'{doc_days[counter]}{int(cells_list[0].text)+1}'].font = font
-                    ws[f'{doc_days[counter]}{int(cells_list[0].text)+1}'].fill = fill
                     group_list.remove(group_curr)
                     text = '\n'.join(group for group in group_list)
                     ws[f'{doc_days[counter]}{int(cells_list[0].text)+1}'] = text
