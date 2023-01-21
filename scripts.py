@@ -45,7 +45,7 @@ def script_2(gen_excel_table_path: str, key_word: str, output_excel_table_path: 
 
                     #если пара с номером недели в расписании не соответсвует номеру нужной недели, изменения не вносятся, ячейка пропускается
                     if (key_word not in values[0] and week_num == 1) or (key_word not in values[1] and week_num == 2):
-                        break
+                        continue
                 
                 #base_days_1[day]: из словаря по ключу "day" получаем букву столбца таблицы
                 #base_times[time]: из словаря по ключу "time" получаем номер строки
@@ -102,7 +102,7 @@ def script_3(document_path: str, key_word: str, output_excel_table_path: str) ->
 
             if key_word in cells_list[3].text.split() and cells_list[3].text != cells_list[5].text:
                 #получаем группу из word документа для которой есть замена 
-                group_curr = f'{cells_list[1].text.split()[0]} - {cells_list[1].text.split()[1]}'
+                group_curr = get_correct_group(cells_list[1].text)
                 #получаем список групп по расписанию из конечной таблицы
                 group_list = ws[f'{doc_days[counter]}{int(cells_list[0].text)+1}'].value
 
@@ -123,22 +123,25 @@ def script_3(document_path: str, key_word: str, output_excel_table_path: str) ->
                     ws[f'{doc_days[counter]}{int(cells_list[0].text)+1}'] = text
 
             elif key_word in cells_list[5].text.split() and cells_list[3].text != cells_list[5].text:
+                #добавляет пару в рассписание
+                #группа, которую надо добавить
+                group_curr = get_correct_group(cells_list[1].text)
+                if '-' not in cells_list[0].text:
+                    #группы, которые уже есть в ячейке
+                    text_old = ws[f'{doc_days[counter]}{int(cells_list[0].text)+1}'].value
+                else:
+                    continue
+
+                if text_old != None:
+                    ws[f'{doc_days[counter]}{int(cells_list[0].text)+1}'] = text_old+f'{group_curr} \n'
+                else:
+                    ws[f'{doc_days[counter]}{int(cells_list[0].text)+1}'] = f'{group_curr} \n'
+                
                 #задает стиль ячейки (зеленый)
                 font = Font(color='1b4715', bold=True)
                 fill = PatternFill(patternType='solid', fgColor='86d980')
                 ws[f'{doc_days[counter]}{int(cells_list[0].text)+1}'].font = font
                 ws[f'{doc_days[counter]}{int(cells_list[0].text)+1}'].fill = fill
-
-                #добавляет пару в рассписание
-                #группы, которые уже есть в ячейке
-                text_old = ws[f'{doc_days[counter]}{int(cells_list[0].text)+1}'].value
-                #группа, которую надо добавить
-                text_new = get_correct_group(cells_list[1].text)
-
-                if text_old != None:
-                    ws[f'{doc_days[counter]}{int(cells_list[0].text)+1}'] = text_old+f'{text_new} \n'
-                else:
-                    ws[f'{doc_days[counter]}{int(cells_list[0].text)+1}'] = f'{text_new} \n'
 
     #сохранение изменений в таблице
     wb.save(output_excel_table_path)
@@ -146,7 +149,7 @@ def script_3(document_path: str, key_word: str, output_excel_table_path: str) ->
 
 def get_correct_group(group_name: str) -> str:
     group_name = group_name.split()
-    return f'{group_name[0]} - {group_name[1]}'
+    return f'{group_name[0]} - {group_name[-1]}'
 
 def script_4(output_excel_table_path: str) -> None:
     #открытие таблицы вывода
